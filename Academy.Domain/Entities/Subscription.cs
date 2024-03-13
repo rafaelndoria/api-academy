@@ -34,18 +34,30 @@ namespace Academy.Domain.Entities
             AccessPermittedUntil = null;
         }
 
+        public void BlockSubscription()
+        {
+            Status = (int)EStatusSubscription.Blocked;
+        }
+
         public void RenewSubscription(EPlanType periodInMonths)
         {
             DateTime dayNow = DateTime.Now;
             int addDaysSubscription = 0;
 
             if (AccessPermittedUntil != null && dayNow < AccessPermittedUntil)
-            {
                 addDaysSubscription = (int)(AccessPermittedUntil - dayNow).Value.TotalDays;
-            }
 
             AccessPermittedUntil = dayNow.AddDays(addDaysSubscription).AddMonths((int)periodInMonths);
             Status = (int)EStatusSubscription.Active;
+        }
+
+        public void VerifyAccess()
+        {
+            if (AccessPermittedUntil == null)
+               EndSubscription();
+
+            if (DateTime.Now > AccessPermittedUntil)
+                EndSubscription();
         }
     }
 }
