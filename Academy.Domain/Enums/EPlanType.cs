@@ -2,10 +2,10 @@ namespace Academy.Domain.Enums
 {
     public enum EPlanType
     {
-        Mensal = 1,
-        Bimestral = 2,
-        Trimestral = 3,
-        Semestral = 6,
-        Anual = 12
+        Monthly = 1,
+        Bimonthly = 2,
+        Quarterly = 3,
+        Semiannual = 6,
+        Yearly = 12
     }
 }

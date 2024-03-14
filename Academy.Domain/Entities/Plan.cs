@@ -2,6 +2,10 @@ namespace Academy.Domain.Entities
 {
     public class Plan : Entity
     {
+        public Plan()
+        {
+            
+        }
         public Plan(string name, double price, int entriesPerDay, int planTypeId)
         {
             Name = name;

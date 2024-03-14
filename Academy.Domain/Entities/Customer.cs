@@ -2,6 +2,10 @@ namespace Academy.Domain.Entities
 {
     public class Customer : Entity
     {
+        public Customer()
+        {
+            
+        }
         public Customer(string name, string phoneNumber, string email, string cpf, int planId)
         {
             Name = name;
