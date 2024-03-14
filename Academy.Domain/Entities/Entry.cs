@@ -1,9 +1,14 @@
+using System.Globalization;
+using Academy.Domain.Validations;
+
 namespace Academy.Domain.Entities
 {
     public class Entry : Entity
     {
         public Entry(DateTime date, string timeIn, int customerId)
         {
+            ValidateDomain(date, timeIn, customerId);
+            
             Date = date;
             TimeIn = timeIn;
             CustomerId = customerId;
@@ -26,18 +31,32 @@ namespace Academy.Domain.Entities
         {
             try
             {
-                var timeIn = DateTime.Parse(TimeIn);
-                var timeOn = DateTime.Parse(timeOnInput);
+                if (!DateTime.TryParse(timeOnInput, out var timeOn))
+                {
+                    throw new Exception("Invalid time format");
+                }
 
+                var timeIn = DateTime.Parse(TimeIn);
                 if (timeOn < timeIn)
                 {
                     throw new Exception("TimeOn cannot be less than TimeIn");
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception("Invalid time format");
+                throw new Exception("Validation failed: " + ex.Message);
             }
+        }
+
+        private void ValidateDomain(DateTime date, string timeIn, int customerId)
+        {
+            DomainExceptionValidation.When(date == null || date == DateTime.MinValue, "Invalid date. Date is required");
+
+            DomainExceptionValidation.When(string.IsNullOrWhiteSpace(timeIn), "Invalid timeIn. TimeIn is required");
+            DateTime timeInDateTime;
+            DomainExceptionValidation.When(!DateTime.TryParseExact(timeIn, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out timeInDateTime), "Invalid timeIn. TimeIn must be in the format HH:mm");
+
+            DomainExceptionValidation.When(customerId == 0, "Invalid customerId. CustomerId is required");
         }
     }
 }
