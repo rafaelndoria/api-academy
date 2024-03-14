@@ -1,4 +1,5 @@
 using Academy.Domain.Enums;
+using Academy.Domain.Validations;
 
 namespace Academy.Domain.Entities
 {
@@ -6,6 +7,8 @@ namespace Academy.Domain.Entities
     {
         public Subscription(DateTime dateSubscription, int customerId, int planId)
         {
+            ValidateDomain(dateSubscription, customerId, planId);
+
             DateSubscription = dateSubscription;
             CustomerId = customerId;
             PlanId = planId;
@@ -58,6 +61,15 @@ namespace Academy.Domain.Entities
 
             if (DateTime.Now > AccessPermittedUntil)
                 EndSubscription();
+        }
+
+        private void ValidateDomain(DateTime dateSubscription, int customerId, int planId)
+        {
+            DomainExceptionValidation.When(dateSubscription == null || dateSubscription == DateTime.MinValue, "Invalid dateSubscription. DateSubscription is required");
+
+            DomainExceptionValidation.When(customerId == 0, "Invalid customerId. CustomerId is required");
+
+            DomainExceptionValidation.When(planId == 0, "Invalid planId. PlanId is required");
         }
     }
 }
