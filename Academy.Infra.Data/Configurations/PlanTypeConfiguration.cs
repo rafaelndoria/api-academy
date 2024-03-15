@@ -17,10 +17,10 @@ namespace Academy.Infra.Data.Configurations
                 .HasMaxLength(50);
 
             builder.HasData(
-                new PlanType(1, "Monthly"),
-                new PlanType(2, "Bimonthly"),
-                new PlanType(3, "Semiannual"),
-                new PlanType(4, "Yearly"));
+                new PlanType(1, "Monthly", 1),
+                new PlanType(2, "Bimonthly", 2),
+                new PlanType(3, "Semiannual", 6),
+                new PlanType(4, "Yearly", 12));
         }
     }
 }
