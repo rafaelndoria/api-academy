@@ -5,7 +5,10 @@ namespace Academy.Domain.Entities
 {
     public class Subscription : Entity
     {
-        public Subscription(DateTime dateSubscription, int customerId, int planId)
+        public Subscription()
+        { }
+
+        public Subscription(DateTime dateSubscription, int customerId, int periodInMonths, int planId)
         {
             ValidateDomain(dateSubscription, customerId, planId);
 
@@ -13,7 +16,7 @@ namespace Academy.Domain.Entities
             CustomerId = customerId;
             PlanId = planId;
 
-            Status = (int)EStatusSubscription.Inactive;
+            StartSubscription(periodInMonths);
         }
 
         public DateTime DateSubscription { get; private set; }
@@ -25,7 +28,7 @@ namespace Academy.Domain.Entities
         public int PlanId { get; set; }
         public Plan? Plan { get; set; }
 
-        public void StartSubscription(EPlanType periodInMonths)
+        private void StartSubscription(int periodInMonths)
         {
             AccessPermittedUntil = DateSubscription.AddMonths((int)periodInMonths);
             Status = (int)EStatusSubscription.Active;
@@ -42,17 +45,33 @@ namespace Academy.Domain.Entities
             Status = (int)EStatusSubscription.Blocked;
         }
 
-        public void RenewSubscription(EPlanType periodInMonths)
+        public void RenewSubscription(int periodInMonths)
         {
             DateTime dayNow = DateTime.Now;
             int addDaysSubscription = 0;
 
             if (AccessPermittedUntil != null && dayNow < AccessPermittedUntil)
-                addDaysSubscription = (int)(AccessPermittedUntil - dayNow).Value.TotalDays;
+            {
+                DateTime dayAccess = (DateTime)AccessPermittedUntil;
+                addDaysSubscription = (int)(dayAccess - dayNow).TotalDays;
+            }
 
-            AccessPermittedUntil = dayNow.AddDays(addDaysSubscription).AddMonths((int)periodInMonths);
+            AccessPermittedUntil = dayNow.AddDays(addDaysSubscription).AddMonths(periodInMonths);
             Status = (int)EStatusSubscription.Active;
         }
+
+        public void UpdatePlan(int planId, int periodInMonths)
+        {
+            ValidateDomain(DateSubscription, CustomerId, planId);
+
+            if (DateTime.Now < AccessPermittedUntil)
+                throw new Exception("Only change plans when it ends");
+
+            DateSubscription = DateTime.Now;
+            PlanId = planId;
+            AccessPermittedUntil = DateSubscription.AddMonths(periodInMonths);
+            Status = (int)EStatusSubscription.Active;
+        } 
 
         public void VerifyAccess()
         {
