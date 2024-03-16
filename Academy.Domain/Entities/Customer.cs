@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using Academy.Domain.Validations;
 
@@ -33,10 +34,12 @@ namespace Academy.Domain.Entities
 
         public int PlanId { get; set; }
         public Plan? Plan { get; set; }
+        [JsonIgnore]
         public IEnumerable<Subscription> Subscriptions { get; set; } = new List<Subscription>();
+        [JsonIgnore]
         public IEnumerable<Entry> Entries { get; set; } = new List<Entry>();
 
-        public void Invactivate()
+        public void Inactivate()
         {
             Active = false;
         }
@@ -57,7 +60,7 @@ namespace Academy.Domain.Entities
             if (PhoneNumber != phoneNumber)
             {
                 DomainExceptionValidation.When(string.IsNullOrEmpty(phoneNumber), "Invalid phone number. Phone number is required");
-            DomainExceptionValidation.When(phoneNumber.Length != 11, "Invalid phone number. Phone number must have a 11 characters");
+                DomainExceptionValidation.When(phoneNumber.Length != 11, "Invalid phone number. Phone number must have a 11 characters");
             }
             if (Email != email)
             {
@@ -70,7 +73,7 @@ namespace Academy.Domain.Entities
                 DomainExceptionValidation.When(string.IsNullOrEmpty(cpf), "Invalid CPF. CPF is required");
                 DomainExceptionValidation.When(cpf.Length != 11, "Invalid CPF. CPF must have a 11 characters");
             }
-            if (PlanId != planId)
+            if (PlanId != planId || planId <= 0)
             {
                 DomainExceptionValidation.When(planId <= 0, "Invalid planId. PlanId is required");
             }

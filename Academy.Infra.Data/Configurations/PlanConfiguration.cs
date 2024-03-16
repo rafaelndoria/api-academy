@@ -26,12 +26,12 @@ namespace Academy.Infra.Data.Configurations
             builder.Property(x => x.DateCreated)
                 .IsRequired();
 
-            builder.Property(x => x.PlayTypeId)
+            builder.Property(x => x.PlanTypeId)
                 .IsRequired();
 
             builder.HasOne(x => x.PlanType)
                 .WithMany(x => x.Plans)
-                .HasForeignKey(x => x.PlayTypeId);
+                .HasForeignKey(x => x.PlanTypeId);
         }
     }
 }

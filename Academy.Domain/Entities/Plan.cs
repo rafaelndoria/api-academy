@@ -15,7 +15,7 @@ namespace Academy.Domain.Entities
             Name = name;
             Price = price;
             EntriesPerDay = entriesPerDay;
-            PlayTypeId = planTypeId;
+            PlanTypeId = planTypeId;
 
             DateCreated = DateTime.Now;
         }
@@ -25,7 +25,7 @@ namespace Academy.Domain.Entities
         public int EntriesPerDay { get; private set; }
         public DateTime DateCreated { get; private set; }
 
-        public int PlayTypeId { get; set; }
+        public int PlanTypeId { get; set; }
         public PlanType? PlanType { get; set; }
         public IEnumerable<PlanTime> PlanTimes { get; set; } = new List<PlanTime>();
         public IEnumerable<Customer> Customers { get; set; } = new List<Customer>();
@@ -47,7 +47,7 @@ namespace Academy.Domain.Entities
             {
                 DomainExceptionValidation.When(entriesPerDay == 0, "Invalid entriesPerDay. EntriesPerDay is required");
             }
-            if (PlayTypeId != planTypeId)
+            if (PlanTypeId != planTypeId)
             {
                 DomainExceptionValidation.When(planTypeId == 0, "Invalid planTypeId. PlanTypeId is required");
             }
@@ -60,7 +60,7 @@ namespace Academy.Domain.Entities
             Name = name;
             Price = price;
             EntriesPerDay = entriesPerDay;
-            PlayTypeId = planTypeId;
+            PlanTypeId = planTypeId;
         }
     }
 }
