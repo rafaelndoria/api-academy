@@ -9,6 +9,7 @@ namespace Academy.Application.Mappings
         public DomainDTOMappingProfile()
         {
             CreateMap<Customer, CustomerDTO>().ReverseMap();
+            CreateMap<Plan, PlanDTO>().ReverseMap();
         }
     }
 }

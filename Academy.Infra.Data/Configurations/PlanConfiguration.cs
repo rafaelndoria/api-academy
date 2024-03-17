@@ -23,6 +23,9 @@ namespace Academy.Infra.Data.Configurations
             builder.Property(x => x.EntriesPerDay)
                 .IsRequired();
 
+            builder.Property(x => x.Active)
+                .IsRequired();
+
             builder.Property(x => x.DateCreated)
                 .IsRequired();
 

@@ -21,10 +21,12 @@ namespace Academy.Infra.IoC
 
             // Repository
             services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IPlanRepository, PlanRepository>();
 
             // Service
             services.AddAutoMapper(typeof(DomainDTOMappingProfile));
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IPlanService, PlanService>();
 
             return services;
         }
