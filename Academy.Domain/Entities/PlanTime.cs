@@ -5,22 +5,24 @@ namespace Academy.Domain.Entities
 {
     public class PlanTime : Entity
     {
-        public PlanTime(string startTime, string endTime, int dayWeek, int playId)
+        public PlanTime(string startTime, string endTime, int planId)
         {
+            ValidateDomain(startTime, endTime, planId);
+
             StartTime = startTime;
             EndTime = endTime;
-            DayWeek = dayWeek;
-            PlayId = playId;
+            PlanId = planId;
         }
 
         public string StartTime { get; private set; }
         public string EndTime { get; private set; }
-        public int DayWeek { get; private set; }
 
-        public int PlayId { get; set; }
+        public int WeekId { get; set; }
+        public Week? Week { get; set; }
+        public int PlanId { get; set; }
         public Plan? Plan { get; set; }
 
-        private void ValidateDomain(string startTime, string endTime, int dayWeek, int playId)
+        private void ValidateDomain(string startTime, string endTime, int planId)
         {
             var initialTime = "";
             if (StartTime != startTime)
@@ -43,14 +45,18 @@ namespace Academy.Domain.Entities
                     DomainExceptionValidation.When(endTimeDateTime < initialTimeDateTime, "Invalid end time. End time cannot be less than start time");
                 }
             }
-            if (DayWeek != dayWeek)
+            if (PlanId != planId || planId <= 0)
             {
-                DomainExceptionValidation.When(dayWeek <= 0, "Invalid dayWeek. DayWeek is required");
+                DomainExceptionValidation.When(planId <= 0, "Invalid playId. PlayId is required");
             }
-            if (PlayId != playId)
-            {
-                DomainExceptionValidation.When(playId <= 0, "Invalid playId. PlayId is required");
-            }
+        }
+
+        public void Update(string startTime, string endTime)
+        {
+            ValidateDomain(startTime, endTime, PlanId);
+
+            StartTime = startTime;
+            EndTime = endTime;
         }
     }
 }

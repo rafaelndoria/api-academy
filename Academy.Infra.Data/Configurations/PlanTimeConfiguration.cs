@@ -18,15 +18,19 @@ namespace Academy.Infra.Data.Configurations
             builder.Property(x => x.EndTime)
                 .IsRequired();
 
-            builder.Property(x => x.DayWeek)
+            builder.Property(x => x.WeekId)
                 .IsRequired();
 
-            builder.Property(x => x.PlayId)
+            builder.Property(x => x.PlanId)
                 .IsRequired();
+
+            builder.HasOne(x => x.Week)
+                .WithMany(x => x.PlanTimes)
+                .HasForeignKey(x => x.WeekId);
 
             builder.HasOne(x => x.Plan)
                 .WithMany(x => x.PlanTimes)
-                .HasForeignKey(x => x.PlayId);
+                .HasForeignKey(x => x.PlanId);
         }
     }
 }
